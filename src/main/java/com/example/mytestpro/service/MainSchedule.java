@@ -22,6 +22,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+/**
+ * @author lizhihai
+ * @date 2021/09/11
+ */
 @Slf4j
 @Service
 public class MainSchedule {

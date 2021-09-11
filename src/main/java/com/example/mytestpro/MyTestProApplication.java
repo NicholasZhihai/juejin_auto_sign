@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
+ * @author lizhihai
+ * @date 2021/09/11
  * 开启定时任务，取消springdatasource加载
  */
 @EnableScheduling
