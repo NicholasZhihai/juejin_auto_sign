@@ -39,11 +39,12 @@ public class MainSchedule {
         for(Cookies cookie:Cookies.values()){
             boolean hasSign=checkIn(cookie);
             if(hasSign) {continue;}
-            // 第一次免费抽奖
+            //第一次免费抽奖
             draw(cookie);
             //还能抽就继续干
             while(cookie.isAllIn()&&getCurPoint(cookie)>=200){
                 draw(cookie);
+                Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息，不然抽到好东西也收不到钉钉
             }
         }
         logger.info("执行结束");
@@ -56,7 +57,7 @@ public class MainSchedule {
      */
     public boolean checkIn(Cookies cookie) throws Exception {
         String response = commnoReuqest(Constans.CHECK_IN, Constans.POST,cookie);
-        logger.info(response);
+        logger.info("{}{}",cookie.getName(),response);
         boolean hasSign=!response.contains("err_no\":0");
         if(hasSign){
             sendHttps.sendToDingDing(cookie.getName()+response);
