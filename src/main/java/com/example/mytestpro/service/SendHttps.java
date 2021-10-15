@@ -109,7 +109,6 @@ public class SendHttps {
         //还需要加签，参考  https://developers.dingtalk.com/document/robots/customize-robot-security-settings  这里鬼知道为啥过不了验证，就改成公网ip校验了
         //参考https://developers.dingtalk.com/document/robots/customize-robot-security-settings
 
-        dingDingToken=dingDingToken;//+getSign();
         // 请求的JSON数据，这里我用map在工具类里转成json格式
         Map<String,Object> json=new HashMap();
         Map<String,Object> text=new HashMap();
@@ -118,7 +117,6 @@ public class SendHttps {
         json.put("text",text);
         // 发送post请求
         String response = SendHttps.sendPostByMap(dingDingToken,json);
-        System.out.println("相应结果："+response);
     }
 
     /**

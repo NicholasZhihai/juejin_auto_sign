@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class DrawResponce {
+public class DrawResponse {
 
     @JsonProperty("err_no")
     private Integer errNo;

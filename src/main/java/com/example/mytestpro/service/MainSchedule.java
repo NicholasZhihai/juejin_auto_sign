@@ -4,12 +4,13 @@ import com.alibaba.fastjson.TypeReference;
 import com.example.mytestpro.constans.Constans;
 
 import com.example.mytestpro.cookieEnum.Cookies;
-import com.example.mytestpro.responce.DrawResponce;
+import com.example.mytestpro.responce.CalendarResponse;
+import com.example.mytestpro.responce.DrawResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
@@ -20,7 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author lizhihai
@@ -33,6 +37,12 @@ public class MainSchedule {
     @Autowired
     private SendHttps sendHttps;
 
+    //@Scheduled(cron = "0/15 * * * * ?")
+    public void test () throws Exception {
+        log.info("test 开始");
+        CalendarResponse calendarText = getCalendarText();
+        sendHttps.sendToDingDing(calendarText.getData().toString());
+    }
     @Scheduled(cron = "0 1 0 * * ?")
     public void excute() throws Exception {
         logger.info("定时任务开始");
@@ -56,7 +66,7 @@ public class MainSchedule {
      * @throws Exception
      */
     public boolean checkIn(Cookies cookie) throws Exception {
-        String response = commnoReuqest(Constans.CHECK_IN, Constans.POST,cookie);
+        String response = commonRequest(Constans.CHECK_IN, Constans.POST,cookie);
         logger.info("{}{}",cookie.getName(),response);
         boolean hasSign=!response.contains("err_no\":0");
         if(hasSign){
@@ -71,13 +81,14 @@ public class MainSchedule {
      * @throws Exception
      */
     public void draw(Cookies cookie) throws Exception {
-        String response = commnoReuqest(Constans.DRAW, Constans.POST,cookie);
-        DrawResponce data= JSON.parseObject(response,new TypeReference<DrawResponce>(){});
+        String response = commonRequest(Constans.DRAW, Constans.POST,cookie);
+        DrawResponse data= JSON.parseObject(response,new TypeReference<DrawResponse>(){});
         String prizeName=data.getData().getLotteryName();
         if(!"66矿石".equals(prizeName)&&!prizeName.contains("Bug")){
             log.error("抽到好东西了！！！！！！");
             //发送到钉钉
         }
+        log.info("{}抽到{}",cookie.getName(),prizeName);
         sendHttps.sendToDingDing(cookie.getName()+"抽到"+prizeName);
         logger.info(response);
     }
@@ -88,12 +99,21 @@ public class MainSchedule {
      * @throws Exception
      */
     public int getCurPoint(Cookies cookie) throws Exception {
-        String response = commnoReuqest(Constans.GET_CUR_POINT, Constans.GET,cookie);
+        String response = commonRequest(Constans.GET_CUR_POINT, Constans.GET,cookie);
         logger.info(response);
         Map<String, Object> res = JSON.parseObject(response);
         int curPoint = (int) res.get("data");
         logger.info("{}还剩{}矿石", cookie.getName(),curPoint);
         return curPoint;
+    }
+    /**
+     * 查询每日程序员日历文案
+     */
+    public CalendarResponse getCalendarText() throws Exception {
+        String response=commonRequest(Constans.GET_CODER_CLENDAR,Constans.GET,Cookies.HAI1);
+        CalendarResponse data= JSON.parseObject(response,new TypeReference<CalendarResponse>(){});
+        log.info(data.toString());
+        return data;
     }
 
     /**
@@ -104,7 +124,7 @@ public class MainSchedule {
      * @return
      * @throws Exception
      */
-    public String commnoReuqest(String url, String method,Cookies cookie) throws Exception {
+    public String commonRequest(String url, String method, Cookies cookie) throws Exception {
         URL serverUrl = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) serverUrl.openConnection();
         conn.setRequestMethod(method);
@@ -133,4 +153,5 @@ public class MainSchedule {
             return result;
         }
     }
+
 }
