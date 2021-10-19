@@ -4,10 +4,9 @@ import com.alibaba.fastjson.TypeReference;
 import com.example.mytestpro.constans.Constans;
 
 import com.example.mytestpro.cookieEnum.Cookies;
-import com.example.mytestpro.responce.CalendarResponse;
-import com.example.mytestpro.responce.DrawResponse;
+import com.example.mytestpro.response.CalendarResponse;
+import com.example.mytestpro.response.DrawResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author lizhihai

@@ -1,11 +1,10 @@
-package com.example.mytestpro.responce;
+package com.example.mytestpro.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 @NoArgsConstructor
