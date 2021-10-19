@@ -21,5 +21,6 @@ public class Constans {
     public static final String GET_CODER_CLENDAR="https://api.juejin.cn/growth_api/v1/get_coder_calendar";
     //钉钉机器人token
     public static final String DINGDINGTOKEN="https://oapi.dingtalk.com/robot/send?access_token=4167f47e8866967c19aa799ddc3fe7e16583626e419742300fedcb1e582b1872";
-
+    //redis key 每日日历格言
+    public static final String REDIS_KEY_CALENDAR="dailyWord";
 }

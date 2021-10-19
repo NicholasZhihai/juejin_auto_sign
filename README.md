@@ -37,6 +37,7 @@ cookieenum
 
 对接钉钉参考了https://www.jb51.cc/java/526453.html  代码作者zhouhe 感谢
 
+后续更新都是自己写的小demo，包括配置web拦截器，配置redis，自定义注解校验参数等等
 
 
 2021.09.10 lizhihai @shanghai @qq786710726

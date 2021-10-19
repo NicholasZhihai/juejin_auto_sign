@@ -3,9 +3,11 @@ package com.example.mytestpro.service;
 import com.alibaba.fastjson.TypeReference;
 import com.example.mytestpro.constans.Constans;
 
-import com.example.mytestpro.cookieEnum.Cookies;
+import com.example.mytestpro.enums.Cookies;
 import com.example.mytestpro.response.CalendarResponse;
 import com.example.mytestpro.response.DrawResponse;
+import com.example.mytestpro.util.RedisUtil;
+import com.example.mytestpro.util.TimeFormatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -31,16 +34,21 @@ import java.util.Map;
 public class MainSchedule {
     private final static Logger logger = LoggerFactory.getLogger(MainSchedule.class);
     @Autowired
+    RedisUtil redisUtil;
+    @Autowired
     private SendHttps sendHttps;
 
     //@Scheduled(cron = "0/15 * * * * ?")
+    @Scheduled(cron = "0 8 0 * * ?")
     public void test () throws Exception {
         log.info("test 开始");
         CalendarResponse calendarText = getCalendarText();
-        sendHttps.sendToDingDing(calendarText.getData().toString());
+        String calendarStr = calendarText.getData().toString();
+        sendHttps.sendToDingDing(calendarStr);
+        redisUtil.zAdd(Constans.REDIS_KEY_CALENDAR,calendarStr,TimeFormatUtil.DateToDouble(new Date(),TimeFormatUtil.YYYYMMDD));
     }
     @Scheduled(cron = "0 1 0 * * ?")
-    public void excute() throws Exception {
+    public void execute() throws Exception {
         logger.info("定时任务开始");
         for(Cookies cookie:Cookies.values()){
             boolean hasSign=checkIn(cookie);
