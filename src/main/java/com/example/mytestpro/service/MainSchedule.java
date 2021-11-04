@@ -38,16 +38,15 @@ public class MainSchedule {
     @Autowired
     private SendHttps sendHttps;
 
-    //@Scheduled(cron = "0/15 * * * * ?")
-    @Scheduled(cron = "0 8 0 * * ?")
-    public void test () throws Exception {
-        log.info("test 开始");
+//    //@Scheduled(cron = "0/15 * * * * ?")
+//    @Scheduled(cron = "0 8 0 * * ?")
+    public void calendar() throws Exception {
         CalendarResponse calendarText = getCalendarText();
         String calendarStr = calendarText.getData().toString();
         sendHttps.sendToDingDing(calendarStr);
         redisUtil.zAdd(Constans.REDIS_KEY_CALENDAR,calendarStr,TimeFormatUtil.DateToDouble(new Date(),TimeFormatUtil.YYYYMMDD));
     }
-    @Scheduled(cron = "0 1 0 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void execute() throws Exception {
         logger.info("定时任务开始");
         for(Cookies cookie:Cookies.values()){
@@ -61,6 +60,7 @@ public class MainSchedule {
                 Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息，不然抽到好东西也收不到钉钉
             }
         }
+        calendar();
         logger.info("执行结束");
     }
 
@@ -94,7 +94,6 @@ public class MainSchedule {
         }
         log.info("{}抽到{}",cookie.getName(),prizeName);
         sendHttps.sendToDingDing(cookie.getName()+"抽到"+prizeName);
-        logger.info(response);
     }
 
     /**
