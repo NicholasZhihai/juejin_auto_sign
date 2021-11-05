@@ -1,4 +1,4 @@
-package com.example.mytestpro.response;
+package com.example.mytestpro.service.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

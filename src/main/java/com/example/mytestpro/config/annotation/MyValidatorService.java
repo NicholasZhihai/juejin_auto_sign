@@ -1,4 +1,4 @@
-package com.example.mytestpro.annotation;
+package com.example.mytestpro.config.annotation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

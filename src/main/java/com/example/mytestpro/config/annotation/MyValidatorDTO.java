@@ -1,10 +1,8 @@
-package com.example.mytestpro.annotation;
+package com.example.mytestpro.config.annotation;
 
 import lombok.Data;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 public class MyValidatorDTO {

@@ -1,4 +1,4 @@
-package com.example.mytestpro.request;
+package com.example.mytestpro.service.request;
 
 import lombok.Data;
 

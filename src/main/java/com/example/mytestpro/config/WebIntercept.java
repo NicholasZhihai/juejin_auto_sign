@@ -16,7 +16,7 @@ public class WebIntercept implements HandlerInterceptor {
         log.debug("entry pre intercept");
         boolean isQuery=request.getRequestURI().endsWith("/query");
         if (!isQuery){
-            log.info("not query");
+            //log.info("not query");
             return true;
         }
         return true;

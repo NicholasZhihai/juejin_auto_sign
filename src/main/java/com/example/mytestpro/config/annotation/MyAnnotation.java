@@ -1,4 +1,4 @@
-package com.example.mytestpro.annotation;
+package com.example.mytestpro.config.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

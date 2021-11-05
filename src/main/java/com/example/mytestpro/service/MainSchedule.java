@@ -3,9 +3,9 @@ package com.example.mytestpro.service;
 import com.alibaba.fastjson.TypeReference;
 import com.example.mytestpro.constans.Constans;
 
-import com.example.mytestpro.enums.Cookies;
-import com.example.mytestpro.response.CalendarResponse;
-import com.example.mytestpro.response.DrawResponse;
+import com.example.mytestpro.constans.enums.Cookies;
+import com.example.mytestpro.service.response.CalendarResponse;
+import com.example.mytestpro.service.response.DrawResponse;
 import com.example.mytestpro.util.RedisUtil;
 import com.example.mytestpro.util.TimeFormatUtil;
 import lombok.extern.slf4j.Slf4j;

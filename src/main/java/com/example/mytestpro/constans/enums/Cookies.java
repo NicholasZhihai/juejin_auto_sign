@@ -1,4 +1,4 @@
-package com.example.mytestpro.enums;
+package com.example.mytestpro.constans.enums;
 
 //cookie 掘金的cookie据说有一个月有效期，挂了就再拷一个过来
 public enum Cookies {

@@ -10,14 +10,14 @@ import java.util.function.Consumer;
 
 @Slf4j
 @Component
-public class kafkaListener {
-    @KafkaListener(topics = {"test"},groupId = "0")
+public class KafkaListenerService {
+    @org.springframework.kafka.annotation.KafkaListener(topics = {"test"},groupId = "0")
     public void listener(ConsumerRecord<String,String> record){
         Optional message = Optional.ofNullable(record.value());
         if (message.isPresent()) {
             Object msg = message.get();
             log.info("topic  test 消费了： Message:{}" , msg);
         }
-        log.info(record.value());
+        log.info(record.key());
     }
 }
