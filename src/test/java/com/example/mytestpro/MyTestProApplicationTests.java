@@ -40,5 +40,23 @@ class MyTestProApplicationTests {
         List<Author> authors = mongoTemplate.find(query, Author.class);
         System.out.println(authors);
     }
+    @Test
+    void te() {
+
+        LongByBit(true,false,true,false,true);
+    }
+    public static  long LongByBit( boolean ... booleans){
+        int length= booleans.length;
+        System.out.println(length);
+        long value=0;
+        for(int i=length-1;i>=0;i--){
+           if(booleans[i]){
+               value+=Math.pow(2,length-i-1);
+           }
+        }
+        System.out.println(booleans);
+        System.out.println(value);
+        return value;
+    }
 
 }
