@@ -39,7 +39,7 @@ public class MainSchedule {
     private SendHttps sendHttps;
 
 //    //@Scheduled(cron = "0/15 * * * * ?")
-//    @Scheduled(cron = "0 8 0 * * ?")
+//    @Scheduled(cron = "0 0 8 * * ?")
     public void calendar() throws Exception {
         CalendarResponse calendarText = getCalendarText();
         String calendarStr = calendarText.getData().toString();

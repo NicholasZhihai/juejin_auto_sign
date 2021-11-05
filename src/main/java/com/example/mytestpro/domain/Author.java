@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "author")
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "age")
     private Integer age;
