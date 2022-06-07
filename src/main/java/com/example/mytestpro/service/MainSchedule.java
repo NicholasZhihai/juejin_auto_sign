@@ -38,26 +38,31 @@ public class MainSchedule {
     @Autowired
     private SendHttps sendHttps;
 
-//    //@Scheduled(cron = "0/15 * * * * ?")
-//    @Scheduled(cron = "0 0 8 * * ?")
+    //    //@Scheduled(cron = "0/15 * * * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void calendar() throws Exception {
         CalendarResponse calendarText = getCalendarText();
         String calendarStr = calendarText.getData().toString();
         sendHttps.sendToDingDing(calendarStr);
-        redisUtil.zAdd(Constans.REDIS_KEY_CALENDAR,calendarStr,TimeFormatUtil.DateToDouble(new Date(),TimeFormatUtil.YYYYMMDD));
+        redisUtil.zAdd(Constans.REDIS_KEY_CALENDAR, calendarStr, TimeFormatUtil.DateToDouble(new Date(), TimeFormatUtil.YYYYMMDD));
     }
+
     @Scheduled(cron = "0 0 8 * * ?")
     public void execute() throws Exception {
         logger.info("定时任务开始");
-        for(Cookies cookie:Cookies.values()){
-            boolean hasSign=checkIn(cookie);
-            if(hasSign) {continue;}
+        for (Cookies cookie : Cookies.values()) {
+            boolean hasSign = checkIn(cookie);
+            if (hasSign) {
+                continue;
+            }
             //第一次免费抽奖
             draw(cookie);
             //还能抽就继续干
-            while(cookie.isAllIn()&&getCurPoint(cookie)>=200){
-                draw(cookie);
-                Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息，不然抽到好东西也收不到钉钉
+            if (cookie.isAllIn()) {
+                while (getCurPoint(cookie) >= 200) {
+                    draw(cookie);
+                    Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息，不然抽到好东西也收不到钉钉
+                }
             }
         }
         calendar();
@@ -70,11 +75,11 @@ public class MainSchedule {
      * @throws Exception
      */
     public boolean checkIn(Cookies cookie) throws Exception {
-        String response = commonRequest(Constans.CHECK_IN, Constans.POST,cookie);
-        logger.info("{}{}",cookie.getName(),response);
-        boolean hasSign=!response.contains("err_no\":0");
-        if(hasSign){
-            sendHttps.sendToDingDing(cookie.getName()+response);
+        String response = commonRequest(Constans.CHECK_IN, Constans.POST, cookie);
+        logger.info("{}{}", cookie.getName(), response);
+        boolean hasSign = !response.contains("err_no\":0");
+        if (hasSign) {
+            sendHttps.sendToDingDing(cookie.getName() + response);
         }
         return hasSign;
     }
@@ -85,36 +90,40 @@ public class MainSchedule {
      * @throws Exception
      */
     public void draw(Cookies cookie) throws Exception {
-        String response = commonRequest(Constans.DRAW, Constans.POST,cookie);
-        DrawResponse data= JSON.parseObject(response,new TypeReference<DrawResponse>(){});
-        String prizeName=data.getData().getLotteryName();
-        if(!"66矿石".equals(prizeName)&&!prizeName.contains("Bug")){
+        String response = commonRequest(Constans.DRAW, Constans.POST, cookie);
+        DrawResponse data = JSON.parseObject(response, new TypeReference<DrawResponse>() {
+        });
+        String prizeName = data.getData().getLotteryName();
+        if (!prizeName.contains("矿石") && !prizeName.contains("Bug")) {
             log.error("抽到好东西了！！！！！！");
             //发送到钉钉
         }
-        log.info("{}抽到{}",cookie.getName(),prizeName);
-        sendHttps.sendToDingDing(cookie.getName()+"抽到"+prizeName);
+        log.info("{}抽到{}", cookie.getName(), prizeName);
+        sendHttps.sendToDingDing(cookie.getName() + "抽到" + prizeName);
     }
 
     /**
      * 查询剩余矿石
+     *
      * @return
      * @throws Exception
      */
     public int getCurPoint(Cookies cookie) throws Exception {
-        String response = commonRequest(Constans.GET_CUR_POINT, Constans.GET,cookie);
+        String response = commonRequest(Constans.GET_CUR_POINT, Constans.GET, cookie);
         logger.info(response);
         Map<String, Object> res = JSON.parseObject(response);
         int curPoint = (int) res.get("data");
-        logger.info("{}还剩{}矿石", cookie.getName(),curPoint);
+        logger.info("{}还剩{}矿石", cookie.getName(), curPoint);
         return curPoint;
     }
+
     /**
      * 查询每日程序员日历文案
      */
     public CalendarResponse getCalendarText() throws Exception {
-        String response=commonRequest(Constans.GET_CODER_CLENDAR,Constans.GET,Cookies.HAI1);
-        CalendarResponse data= JSON.parseObject(response,new TypeReference<CalendarResponse>(){});
+        String response = commonRequest(Constans.GET_CODER_CLENDAR, Constans.GET, Cookies.HAI1);
+        CalendarResponse data = JSON.parseObject(response, new TypeReference<CalendarResponse>() {
+        });
         log.info(data.toString());
         return data;
     }
