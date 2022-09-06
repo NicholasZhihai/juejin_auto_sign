@@ -75,7 +75,7 @@ public class ReptileSchedule {
                 }
             } else if (num.length() == 3) {
                 if (Integer.parseInt(num) > 169 || Integer.parseInt(num) < 149) {
-                    return girl;//超过171 一般认为是男生 直接结束
+                    return girl;//超过170 一般认为是男生 直接结束
                 } else {
                     girl.setValid(true);//149-169之间认定为女生
                     girl.setHeight(num);
@@ -85,7 +85,7 @@ public class ReptileSchedule {
                     girl.setBirth(String.valueOf(1900 + Integer.parseInt(num)));
                 } else if (Integer.parseInt(num) > 18 && Integer.parseInt(num) < 30) {//18-30认定为年龄
                     girl.setBirth(String.valueOf(LocalDate.now().getYear() - Integer.parseInt(num)));
-                } else if (Integer.parseInt(num) > 40 && Integer.parseInt(num) < 60) {//40-60认定为体重
+                } else if (Integer.parseInt(num) > 40 && Integer.parseInt(num) < 59) {//40-60认定为体重
                     girl.setValid(true);
                     girl.setWeight(num);
                 }
