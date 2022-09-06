@@ -56,8 +56,6 @@ public class DrawSchedule {
 
     /**
      * 签到
-     *
-     * @throws Exception
      */
     public boolean checkIn(Cookies cookie) throws Exception {
         String response = HttpUtil.commonRequest(JuejinApi.CHECK_IN, JuejinApi.POST, cookie.getCookie());
@@ -71,8 +69,6 @@ public class DrawSchedule {
 
     /**
      * 抽奖
-     *
-     * @throws Exception
      */
     public void draw(Cookies cookie) throws Exception {
         String response = HttpUtil.commonRequest(JuejinApi.DRAW, JuejinApi.POST, cookie.getCookie());
@@ -89,11 +85,9 @@ public class DrawSchedule {
 
     /**
      * 查询沾喜气列表
-     *
-     * @throws Exception
      */
     public String getLucky(Cookies cookies) throws Exception {
-        Map<String, Object> map =new HashMap();
+        Map<String, Object> map =new HashMap<>();
         map.put("page_no",1);
         map.put("page_size",5);
         String response = HttpUtil.commonRequest(JuejinApi.GET_LUCKY, JuejinApi.POST,cookies.getCookie(), map);
@@ -103,8 +97,6 @@ public class DrawSchedule {
     }
     /**
      * 沾喜气
-     *
-     * @throws Exception
      */
     public void dipLucky(Cookies cookie,String id) throws Exception {
         Map<String, Object> param =new HashMap<>();
@@ -122,11 +114,9 @@ public class DrawSchedule {
     }
     /**
      * 查询bug列表
-     *
-     * @throws Exception
      */
     public BugList getBugs(Cookies cookies) throws Exception {
-        Map<String, Object> map =new HashMap();
+        Map<String, Object> map =new HashMap<>();
         map.put("page_no",1);
         map.put("page_size",20);
         String response = HttpUtil.commonRequest(JuejinApi.BUGS, JuejinApi.POST,cookies.getCookie(), map);
@@ -135,8 +125,6 @@ public class DrawSchedule {
     }
     /**
      * bugFix
-     *
-     * @throws Exception
      */
     public void bugFix(Cookies cookie,Integer bugTime,Integer bugType) throws Exception {
         Map<String, Object> param =new HashMap<>();
@@ -154,9 +142,6 @@ public class DrawSchedule {
 
     /**
      * 查询剩余矿石
-     *
-     * @return
-     * @throws Exception
      */
     public int getCurPoint(Cookies cookie) throws Exception {
         String response = HttpUtil.commonRequest(JuejinApi.GET_CUR_POINT, JuejinApi.GET, cookie.getCookie());

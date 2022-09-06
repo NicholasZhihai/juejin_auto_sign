@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 @Service
 public class ReptileSchedule {
-    private Long lastMessageId = 0L;
     @Resource
     private MongoTemplate mongoTemplate;
     @Resource
@@ -46,6 +45,7 @@ public class ReptileSchedule {
             }
             boolean isGirl = content.contains("性别:女") || content.contains("性别：女") || content.contains("性别女") || content.contains("男朋友") || content.contains("男友") || content.contains("男票") || content.contains("姐妹");
             Girl girl = matchGirl(new Girl(), content);
+            girl.setContent(content);
             girl.setJuejinAccount(e.getMsgInfo().getUserId());
             if (isGirl || girl.isValid()) {
                 Query query = new Query();
@@ -63,7 +63,6 @@ public class ReptileSchedule {
     }
 
     public Girl matchGirl(Girl girl, String content) {
-        girl.setContent(new String(content));
         String regexNum = "[0-9]+";
         Pattern numPattern = Pattern.compile(regexNum);//匹配任意位数字
         Matcher matcher = numPattern.matcher(content);
