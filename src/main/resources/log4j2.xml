@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="log4j2" status="warn">
+    <Properties>
+        <Property name="app.name">juejin</Property>
+        <Property name="log.root.path">/opt/logs/juejin</Property>
+        <Property name="log.real.path">${log.root.path}/${app.name}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <!--控制台彩色日志策略，ide工具控制台输出日志时区分颜色-->
+                <DisableAnsi>false</DisableAnsi>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level}{FATAL=bright red, ERROR=bright red, WARN=red, INFO=blue, DEBUG=green, TRACE=white} %magenta{%pid} [%10.10thread] %cyan{%F}#%magenta{%M}:%blue{%L} - %msg%n</pattern>
+                <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level}{FATAL=bright red, ERROR=bright red, WARN=red, INFO=blue, DEBUG=green, TRACE=white} %magenta{%pid} [%10.10thread] %cyan{%logger{1.}} - %msg%n</pattern>-->
+            </PatternLayout>
+        </Console>
+
+        <!--info日志文件-->
+        <RollingRandomAccessFile name="Info_File">
+            <fileName>${log.real.path}/${app.name}-info.log</fileName>
+            <filePattern>${log.real.path}/%d{yyyy-MM}/${app.name}-info-%d{yyyy-MM-dd}-%i.log.gz</filePattern>
+            <PatternLayout>
+                <Pattern>%-5level %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] (%F:%L) - %msg%n</Pattern>
+                <!--<Pattern>%-5level %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] (%logger{1.}) - %msg%n</Pattern>-->
+            </PatternLayout>
+            <Filters>
+                <!--info以上级别事件及all级别事件的日志-->
+                <!--level阈值过滤器，高于等于该等级的日志将被输出，低于改等级的日志将被忽略-->
+                <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <!--服务启动时的滚动规则，每次服务启动时强制进行日志分割，保证每次服务启动时日志都从一个新的日志文件头部开始输出-->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <!--时间滚动规则，每天0点强制分割文件，尽可能保证不同日期的日志不要混在同一文件中-->
+                <CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true"/>
+                <!--文件大小滚动规则，日志文件达到100m时将进行日志分割并压缩旧文件-->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!--设置日志文件滚动执行策略，可以定制旧文件覆盖策略，这里暂时不执行旧文件覆盖，nomax代表不执行旧文件覆盖，日志文件数量无上限-->
+            <DefaultRolloverStrategy fileIndex="nomax"/>
+        </RollingRandomAccessFile>
+
+        <!--&lt;!&ndash;debug日志文件&ndash;&gt;-->
+        <!--<RollingRandomAccessFile name="Debug_File">-->
+        <!--    <fileName>${log.real.path}/${app.name}-debug.log</fileName>-->
+        <!--    <filePattern>${log.real.path}/%d{yyyy-MM}/${app.name}-debug-%d{yyyy-MM-dd}-%i.log.gz</filePattern>-->
+        <!--    <PatternLayout>-->
+        <!--        <Pattern>%-5level %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] (%file#%method:%line) - %msg%n</Pattern>-->
+        <!--        &lt;!&ndash;<Pattern>%-5level %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] (%logger{1.}) - %msg%n</Pattern>&ndash;&gt;-->
+        <!--    </PatternLayout>-->
+        <!--    <Filters>-->
+        <!--        &lt;!&ndash;debug及all级别事件的日志&ndash;&gt;-->
+        <!--        &lt;!&ndash;1.>=info,DENY;<info,NEUTRAL&ndash;&gt;-->
+        <!--        <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>-->
+        <!--        &lt;!&ndash;2.>=debug,ACCEPT;<debug,DENY&ndash;&gt;-->
+        <!--        <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+        <!--    </Filters>-->
+        <!--    <Policies>-->
+        <!--        &lt;!&ndash;服务启动时的滚动规则，每次服务启动时强制进行日志分割，保证每次服务启动时日志都从一个新的日志文件头部开始输出&ndash;&gt;-->
+        <!--        &lt;!&ndash;<OnStartupTriggeringPolicy/>&ndash;&gt;-->
+        <!--        &lt;!&ndash;时间滚动规则，每天0点强制分割文件，尽可能保证不同日期的日志不要混在同一文件中&ndash;&gt;-->
+        <!--        <CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true"/>-->
+        <!--        &lt;!&ndash;文件大小滚动规则，日志文件达到100m时将进行日志分割并压缩旧文件&ndash;&gt;-->
+        <!--        <SizeBasedTriggeringPolicy size="100 MB"/>-->
+        <!--    </Policies>-->
+        <!--    &lt;!&ndash;设置日志文件滚动执行策略，可以定制旧文件覆盖策略，这里暂时不执行旧文件覆盖，nomax代表不执行旧文件覆盖，日志文件数量无上限&ndash;&gt;-->
+        <!--    <DefaultRolloverStrategy fileIndex="nomax"/>-->
+        <!--</RollingRandomAccessFile>-->
+
+        <!--error日志文件-->
+        <RollingRandomAccessFile name="Error_File">
+            <fileName>${log.real.path}/${app.name}-error.log</fileName>
+            <filePattern>${log.real.path}/%d{yyyy-MM}/${app.name}-error-%d{yyyy-MM-dd}-%i.log.gz</filePattern>
+            <PatternLayout>
+                <Pattern>%-5level %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] (%F:%L) - %msg%n</Pattern>
+            </PatternLayout>
+            <Filters>
+                <!--将会输出error、fatal及all级别事件的日志-->
+                <!--1.>=error,NEUTRAL;<error,DENY-->
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <!--服务启动时的滚动规则，每次服务启动时强制进行日志分割，保证每次服务启动时日志都从一个新的日志文件头部开始输出-->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <!--时间滚动规则，每天0点强制分割文件，尽可能保证不同日期的日志不要混在同一文件中-->
+                <CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true"/>
+                <!--文件大小滚动规则，日志文件达到100m时将进行日志分割并压缩旧文件-->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!--设置日志文件滚动执行策略，可以定制旧文件覆盖策略，这里暂时不执行旧文件覆盖，nomax代表不执行旧文件覆盖，日志文件数量无上限-->
+            <DefaultRolloverStrategy fileIndex="nomax"/>
+        </RollingRandomAccessFile>
+
+        <!--        <DingDing name="DingDing" module="${app.name}" suppress="600">-->
+        <!--            <PatternLayout charset="UTF-8" pattern="%-5level %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] (%F:%L) - %msg%n"/>-->
+        <!--            <Property name="AppKey" value="ding3fgxp6orsdrccls6" />-->
+        <!--            <Property name="AppSecret" value="wLcWAZ3k73GXZT6lzlM_KFQolJ0TqDNltY0uGr1ZdGNhjMLxfr_XoVX2DG64WXC4NeVIvFIEqNG-vL2ENRtoT_mSNde5e5NI82jFsQ4HDKM" />-->
+        <!--            <Property name="Group" value="cidf0CVClDR7ridzZmO+vu5Rw==" />-->
+        <!--            <Property name="Principal" value="xNqXkf10YiS0NTp1120HiSywiEiE" />-->
+        <!--        </DingDing>-->
+    </Appenders>
+
+    <Loggers>
+        <!--完全异步模式：配置文件部分和普通同步模式没有区别，主要是更换AsyncLoggerContextSelector，
+        AsyncLoggerContextSelector 将确保所有记录器都是异步的。
+        更换方式：
+        1.主程序代码开头处加一句代码
+        System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector");
+        2.设置启动参数
+        DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+        -->
+
+        <!--根logger-->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Info_File"/>
+            <!--<AppenderRef ref="Debug_File"/>-->
+            <AppenderRef ref="Error_File"/>
+            <AppenderRef ref="DingDing" />
+            <IncludeLocation>true</IncludeLocation>
+        </Root>
+
+    </Loggers>
+</Configuration>
