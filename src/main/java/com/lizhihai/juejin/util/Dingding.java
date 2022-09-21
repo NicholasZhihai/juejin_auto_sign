@@ -4,7 +4,7 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,7 @@ import static com.lizhihai.juejin.constans.DingdingConfig.DINGDINGTOKEN;
 @Service
 public class Dingding {
     private static Logger logger = LoggerFactory.getLogger(Dingding.class);
-    @Test
-    public void test() throws ApiException {
-        send("快马来报！","666","https://juejin.cn/user/"+"2955960342031933"+"/pins","18390921146","sss");
-    }
+
     public void send(String title,String content,String linkUrl,String messageId,String ... atPhone) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient(DINGDINGTOKEN);
         OapiRobotSendRequest request = new OapiRobotSendRequest();

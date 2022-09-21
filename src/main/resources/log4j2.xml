@@ -118,7 +118,7 @@
             <AppenderRef ref="Info_File"/>
             <!--<AppenderRef ref="Debug_File"/>-->
             <AppenderRef ref="Error_File"/>
-            <AppenderRef ref="DingDing" />
+<!--            <AppenderRef ref="DingDing" />-->
             <IncludeLocation>true</IncludeLocation>
         </Root>
 

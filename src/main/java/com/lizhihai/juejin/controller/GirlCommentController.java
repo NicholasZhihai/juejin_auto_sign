@@ -2,6 +2,7 @@ package com.lizhihai.juejin.controller;
 
 import com.lizhihai.juejin.constans.JuejinApi;
 import com.lizhihai.juejin.domain.Cookies;
+import com.lizhihai.juejin.schedule.DrawSchedule;
 import com.lizhihai.juejin.util.HttpUtil;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,16 +20,25 @@ import java.util.Map;
 public class GirlCommentController {
     @Resource
     private MongoTemplate mongoTemplate;
+    @Resource
+    private DrawSchedule drawSchedule;
+
     @RequestMapping("/commentGirl")
-    public Map<String, Object> girlComment(@RequestParam("comment")String comment,@RequestParam("aim")String aim) throws Exception {
-        Map<String, Object> param =new HashMap<>();
-        param.put("item_id",aim);
-        param.put("client_type",2608);
-        param.put("comment_content",comment);
-        param.put("item_type",4);
-        HttpUtil.commonRequest(JuejinApi.COMMENT, JuejinApi.POST,JuejinApi.lizhihai.getCookie(), param);
-        Map<String, Object> res =new HashMap<>();
-        res.put("res","评论成功");
+    public Map<String, Object> girlComment(@RequestParam("comment") String comment, @RequestParam("aim") String aim) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("item_id", aim);
+        param.put("client_type", 2608);
+        param.put("comment_content", comment);
+        param.put("item_type", 4);
+        HttpUtil.commonRequest(JuejinApi.COMMENT, JuejinApi.POST, JuejinApi.lizhihai.getCookie(), param);
+        Map<String, Object> res = new HashMap<>();
+        res.put("res", "评论成功");
         return res;
+    }
+
+    @RequestMapping("/refresh")
+    public String refresh() throws Exception {
+        drawSchedule.draw();
+        return "success";
     }
 }
