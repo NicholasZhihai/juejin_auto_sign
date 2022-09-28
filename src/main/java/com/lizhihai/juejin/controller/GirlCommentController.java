@@ -4,7 +4,9 @@ import com.lizhihai.juejin.constans.JuejinApi;
 import com.lizhihai.juejin.domain.Cookies;
 import com.lizhihai.juejin.schedule.DrawSchedule;
 import com.lizhihai.juejin.util.HttpUtil;
+import org.apache.tomcat.jni.Thread;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +21,8 @@ import java.util.Map;
 @RestController
 public class GirlCommentController {
     @Resource
-    private MongoTemplate mongoTemplate;
-    @Resource
     private DrawSchedule drawSchedule;
+    private ThreadPoolTaskExecutor executor =new ThreadPoolTaskExecutor();
 
     @RequestMapping("/commentGirl")
     public Map<String, Object> girlComment(@RequestParam("comment") String comment, @RequestParam("aim") String aim) throws Exception {
@@ -38,7 +39,14 @@ public class GirlCommentController {
 
     @RequestMapping("/refresh")
     public String refresh() throws Exception {
-        drawSchedule.draw();
+        executor.execute(() -> {
+            try {
+                drawSchedule.draw();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         return "success";
     }
 }

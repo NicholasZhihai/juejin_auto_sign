@@ -41,7 +41,7 @@ public class DrawSchedule {
             if (item.isDrawAll()) {
                 while (getCurPoint(item) >= 200) {
                     draw(item);
-                    Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息
+                    Thread.currentThread().wait(3000);
                 }
             }
             String lucky = getLucky(item);

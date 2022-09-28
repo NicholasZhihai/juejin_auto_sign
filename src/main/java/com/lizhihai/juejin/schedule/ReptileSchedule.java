@@ -55,7 +55,7 @@ public class ReptileSchedule {
                 List<Girl> sameAccount = mongoTemplate.find(query, Girl.class);
                 if (CollectionUtils.isEmpty(sameAccount)) {
                     mongoTemplate.save(girl);
-                    Thread.sleep(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息
+                    Thread.currentThread().wait(3000);//休眠三秒，钉钉机器人每分钟最多发20次消息
                     dingding.send("快马来报！", content, "https://juejin.cn/user/" + e.getMsgInfo().getUserId() + "/pins", e.getMsgId(), "18390921146");
                 }
             }

@@ -27,7 +27,7 @@ public class Dingding {
         markdown.setTitle(title);
         markdown.setText("#### "+"@"+String.join("@",atPhone)+" \n" +
                 ">  " +content+"\n"+
-                "> ######  [点击发起评论抢占先机]("+"http://localhost:10086/juejin/commentGirl?aim="+messageId+"&comment=恭喜你,通过亚洲舞王阿海的初审,请速速与我详细私聊) \n"+
+                "> ######  [点击发起评论抢占先机]("+"http://localhost:10086/juejin/commentGirl?aim="+messageId+"&comment=末将亚洲舞王阿海， 愿为皇军效劳) \n"+
                 "> ######  [主页详情]("+linkUrl+") \n");
         request.setMarkdown(markdown);
         OapiRobotSendResponse response = client.execute(request);
