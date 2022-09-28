@@ -41,7 +41,7 @@ public class DrawSchedule {
             if (item.isDrawAll()) {
                 while (getCurPoint(item) >= 200) {
                     draw(item);
-                    Thread.currentThread().wait(3000);
+                    Thread.sleep(3000);
                 }
             }
             String lucky = getLucky(item);
