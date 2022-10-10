@@ -9,7 +9,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HttpUtil {
     public static String commonRequest(String url, String method, String  cookie) throws Exception {
@@ -57,4 +60,11 @@ public class HttpUtil {
             return result;
         }
     }
+
+    public static void main(String[] args) throws InterruptedException {
+        for (int i = 0; i <10 ; i++) {
+            System.out.println(LocalDateTime.now());
+            Thread.sleep(3000);
+        }
+        }
 }
