@@ -40,7 +40,7 @@ public class ReptileSchedule {
 
         for (Xiangqin.DataDTO e : data.getData()) {
             String content = e.getMsgInfo().getContent();
-            boolean isGirl = StringUtils.containsAny(content, "性别:女", "性别：女", "性别女", "男朋友", "男友", "男票", "姐妹","小哥","妹妹");
+            boolean isGirl = StringUtils.containsAny(content, "性别:女", "性别：女", "性别女", "男朋友", "男友", "男票", "姐妹", "小哥", "妹妹");
             Girl girl = matchGirl(new Girl(), content);
             girl.setContent(content);
             girl.setJuejinAccount(e.getMsgInfo().getUserId());

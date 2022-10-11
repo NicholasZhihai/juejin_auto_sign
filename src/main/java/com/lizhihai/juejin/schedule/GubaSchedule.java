@@ -1,13 +1,11 @@
 package com.lizhihai.juejin.schedule;
 
 import com.lizhihai.juejin.domain.Guba;
-import com.lizhihai.juejin.util.Dingding;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
