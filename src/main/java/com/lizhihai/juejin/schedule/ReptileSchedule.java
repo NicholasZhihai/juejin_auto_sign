@@ -7,6 +7,7 @@ import com.lizhihai.juejin.domain.response.Girl;
 import com.lizhihai.juejin.domain.response.Xiangqin;
 import com.lizhihai.juejin.util.Dingding;
 import com.lizhihai.juejin.util.HttpUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -39,11 +40,7 @@ public class ReptileSchedule {
 
         for (Xiangqin.DataDTO e : data.getData()) {
             String content = e.getMsgInfo().getContent();
-            boolean isBoy = content.contains("性别:男") || content.contains("性别：男") || content.contains("性别男") || content.contains("女朋友") || content.contains("小伙");
-            if (isBoy) {
-                continue;
-            }
-            boolean isGirl = content.contains("性别:女") || content.contains("性别：女") || content.contains("性别女") || content.contains("男朋友") || content.contains("男友") || content.contains("男票") || content.contains("姐妹");
+            boolean isGirl = StringUtils.containsAny(content, "性别:女", "性别：女", "性别女", "男朋友", "男友", "男票", "姐妹","小哥","妹妹");
             Girl girl = matchGirl(new Girl(), content);
             girl.setContent(content);
             girl.setJuejinAccount(e.getMsgInfo().getUserId());
