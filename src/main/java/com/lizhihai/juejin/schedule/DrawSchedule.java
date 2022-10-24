@@ -25,11 +25,12 @@ public class DrawSchedule {
     @Resource
     private MongoTemplate mongoTemplate;
     private final static Logger logger = LoggerFactory.getLogger(DrawSchedule.class);
+
     @Scheduled(cron = "0 0 8 * * ?")
 //    @Scheduled(cron = "0/2 * * * * ?")
     public void draw() throws Exception {
         List<Cookies> allByIsDeleteNot = mongoTemplate.findAll(Cookies.class);
-        for (Cookies item:allByIsDeleteNot) {
+        for (Cookies item : allByIsDeleteNot) {
             boolean hasSign = checkIn(item);
             if (hasSign) {
                 continue;
@@ -37,7 +38,7 @@ public class DrawSchedule {
             //第一次免费抽奖
             draw(item);
             int curPoint = getCurPoint(item);
-            dingding.send(item.getUserName()+"剩余矿石"+curPoint);
+            dingding.send(item.getUserName() + "剩余矿石" + curPoint);
             if (item.isDrawAll()) {
                 while (getCurPoint(item) >= 200) {
                     draw(item);
@@ -45,11 +46,13 @@ public class DrawSchedule {
                 }
             }
             String lucky = getLucky(item);
-            dipLucky(item,lucky);
+            dipLucky(item, lucky);
             BugList bugs = getBugs(item);
-            for (BugList.DataDTO bug:bugs.getData()) {
-                bugFix(item,bug.getBugTime(), bug.getBugType());
+            int bugfixRes = 0;
+            for (BugList.DataDTO bug : bugs.getData()) {
+                bugfixRes += bugfixRes + (bugFix(item, bug.getBugTime(), bug.getBugType()) ? 1 : 0);
             }
+            dingding.send(item.getUserName() + " bugFix x" + bugfixRes);
         }
     }
 
@@ -87,55 +90,59 @@ public class DrawSchedule {
      * 查询沾喜气列表
      */
     public String getLucky(Cookies cookies) throws Exception {
-        Map<String, Object> map =new HashMap<>();
-        map.put("page_no",1);
-        map.put("page_size",5);
-        String response = HttpUtil.commonRequest(JuejinApi.GET_LUCKY, JuejinApi.POST,cookies.getCookie(), map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("page_no", 1);
+        map.put("page_size", 5);
+        String response = HttpUtil.commonRequest(JuejinApi.GET_LUCKY, JuejinApi.POST, cookies.getCookie(), map);
         LuckyResponse data = JSON.parseObject(response, new TypeReference<LuckyResponse>() {
         });
         return data.getData().getLotteries().get(0).getHistoryId();
     }
+
     /**
      * 沾喜气
      */
-    public void dipLucky(Cookies cookie,String id) throws Exception {
-        Map<String, Object> param =new HashMap<>();
-        param.put("lottery_history_id",id);
-        String response = HttpUtil.commonRequest(JuejinApi.DIP_LUCKY, JuejinApi.POST,cookie.getCookie(), param);
+    public void dipLucky(Cookies cookie, String id) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("lottery_history_id", id);
+        String response = HttpUtil.commonRequest(JuejinApi.DIP_LUCKY, JuejinApi.POST, cookie.getCookie(), param);
         DipLucky data = JSON.parseObject(response, new TypeReference<DipLucky>() {
         });
-        if (data.getErrNo()!=0){
-            logger.error("沾喜气失败{}{}",cookie.getUserName(),data.getErrMsg());
-            dingding.send(cookie.getUserName()+"沾喜气失败"+data.getErrMsg());
-        }
-        else{
-            dingding.send(cookie.getUserName()+"沾喜气成功");
+        if (data.getErrNo() != 0) {
+            logger.error("沾喜气失败{}{}", cookie.getUserName(), data.getErrMsg());
+            dingding.send(cookie.getUserName() + "沾喜气失败" + data.getErrMsg());
+        } else {
+            dingding.send(cookie.getUserName() + "沾喜气成功");
         }
     }
+
     /**
      * 查询bug列表
      */
     public BugList getBugs(Cookies cookies) throws Exception {
-        Map<String, Object> map =new HashMap<>();
-        map.put("page_no",1);
-        map.put("page_size",20);
-        String response = HttpUtil.commonRequest(JuejinApi.BUGS, JuejinApi.POST,cookies.getCookie(), map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("page_no", 1);
+        map.put("page_size", 20);
+        String response = HttpUtil.commonRequest(JuejinApi.BUGS, JuejinApi.POST, cookies.getCookie(), map);
         return JSON.parseObject(response, new TypeReference<BugList>() {
         });
     }
+
     /**
      * bugFix
      */
-    public void bugFix(Cookies cookie,Integer bugTime,Integer bugType) throws Exception {
-        Map<String, Object> param =new HashMap<>();
-        param.put("bug_time",bugTime);
-        param.put("bug_type",bugType);
-        String response = HttpUtil.commonRequest(JuejinApi.COLLECT_BUG, JuejinApi.POST,cookie.getCookie(), param);
-        if (!response.contains("err_no\":0")){
-            logger.error("bugFix失败{}{}",cookie.getUserName(),response);
-            dingding.send(cookie.getUserName()+"bugFix失败"+response);
-        }else {
-            dingding.send(cookie.getUserName()+"bugFix成功"+response);
+    public boolean bugFix(Cookies cookie, Integer bugTime, Integer bugType) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("bug_time", bugTime);
+        param.put("bug_type", bugType);
+        String response = HttpUtil.commonRequest(JuejinApi.COLLECT_BUG, JuejinApi.POST, cookie.getCookie(), param);
+        if (!response.contains("err_no\":0")) {
+            logger.error("bugFix失败{}{}", cookie.getUserName(), response);
+            return false;
+            //dingding.send(cookie.getUserName()+"bugFix失败"+response);
+        } else {
+            return true;
+            //dingding.send(cookie.getUserName()+"bugFix成功"+response);
         }
     }
 
@@ -148,7 +155,7 @@ public class DrawSchedule {
         logger.info(response);
         Map<String, Object> res = JSON.parseObject(response);
         int curPoint = (int) res.get("data");
-        logger.info("{}还剩{}矿石",cookie.getUserName(), curPoint);
+        logger.info("{}还剩{}矿石", cookie.getUserName(), curPoint);
         return curPoint;
     }
 

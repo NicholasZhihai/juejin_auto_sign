@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,4 +50,14 @@ class JuejinApplicationTests {
         }, 1000, 5000);
     }
 
+
+    @Test
+    public void te(){
+        Map<String, Object> extraMap =new HashMap<>();
+        try {
+            extraMap.remove("nb");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
