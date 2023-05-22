@@ -16,7 +16,6 @@ import java.util.Map;
 public class GirlCommentController {
     @Resource
     private DrawSchedule drawSchedule;
-    private final ThreadPoolTaskExecutor executor =new ThreadPoolTaskExecutor();
 
     @RequestMapping("/commentGirl")
     public Map<String, Object> girlComment(@RequestParam("comment") String comment, @RequestParam("aim") String aim) throws Exception {
@@ -32,15 +31,8 @@ public class GirlCommentController {
     }
 
     @RequestMapping("/refresh")
-    public String refresh() {
-        executor.execute(() -> {
-            try {
-                drawSchedule.draw();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
+    public String refresh() throws Exception {
+        drawSchedule.draw();
         return "success";
     }
 }

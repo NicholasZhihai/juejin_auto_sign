@@ -1,5 +1,6 @@
 package com.lizhihai.juejin.domain.response;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,51 +10,51 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class LuckyResponse {
-    @JsonProperty("err_no")
+     @JSONField(name = "err_no")
     private Integer errNo;
-    @JsonProperty("err_msg")
+     @JSONField(name = "err_msg")
     private String errMsg;
-    @JsonProperty("data")
+     @JSONField(name = "data")
     private DataDTO data;
 
     @NoArgsConstructor
     @Data
     public static class DataDTO {
-        @JsonProperty("lotteries")
+         @JSONField(name = "lotteries")
         private List<LotteriesDTO> lotteries;
-        @JsonProperty("count")
+         @JSONField(name = "count")
         private Integer count;
 
         @NoArgsConstructor
         @Data
         public static class LotteriesDTO {
-            @JsonProperty("user_id")
+             @JSONField(name = "user_id")
             private String userId;
-            @JsonProperty("history_id")
+             @JSONField(name = "history_id")
             private String historyId;
-            @JsonProperty("user_name")
+             @JSONField(name = "user_name")
             private String userName;
-            @JsonProperty("user_avatar")
+             @JSONField(name = "user_avatar")
             private String userAvatar;
-            @JsonProperty("lottery_name")
+             @JSONField(name = "lottery_name")
             private String lotteryName;
-            @JsonProperty("lottery_image")
+             @JSONField(name = "lottery_image")
             private String lotteryImage;
-            @JsonProperty("date")
+             @JSONField(name = "date")
             private Integer date;
-            @JsonProperty("dip_lucky_user_count")
+             @JSONField(name = "dip_lucky_user_count")
             private Integer dipLuckyUserCount;
-            @JsonProperty("dip_lucky_users")
+             @JSONField(name = "dip_lucky_users")
             private List<DipLuckyUsersDTO> dipLuckyUsers;
 
             @NoArgsConstructor
             @Data
             public static class DipLuckyUsersDTO {
-                @JsonProperty("user_id")
+                 @JSONField(name = "user_id")
                 private String userId;
-                @JsonProperty("user_name")
+                 @JSONField(name = "user_name")
                 private String userName;
-                @JsonProperty("avatar_large")
+                 @JSONField(name = "avatar_large")
                 private String avatarLarge;
             }
         }

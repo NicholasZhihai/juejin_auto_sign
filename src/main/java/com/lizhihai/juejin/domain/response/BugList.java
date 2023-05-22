@@ -1,5 +1,6 @@
 package com.lizhihai.juejin.domain.response;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,23 +11,23 @@ import java.util.List;
 @Data
 public class BugList {
 
-    @JsonProperty("err_no")
+     @JSONField(name = "err_no")
     private Integer errNo;
-    @JsonProperty("err_msg")
+     @JSONField(name = "err_msg")
     private String errMsg;
-    @JsonProperty("data")
+     @JSONField(name = "data")
     private List<DataDTO> data;
 
     @NoArgsConstructor
     @Data
     public static class DataDTO {
-        @JsonProperty("bug_type")
+         @JSONField(name = "bug_type")
         private Integer bugType;
-        @JsonProperty("bug_time")
+         @JSONField(name = "bug_time")
         private Integer bugTime;
-        @JsonProperty("bug_show_type")
+         @JSONField(name = "bug_show_type")
         private Integer bugShowType;
-        @JsonProperty("is_first")
+         @JSONField(name = "is_first")
         private Boolean isFirst;
     }
 }

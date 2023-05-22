@@ -1,5 +1,6 @@
 package com.lizhihai.juejin.domain.response;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,23 +9,23 @@ import lombok.NoArgsConstructor;
 @Data
 public class DipLucky {
 
-    @JsonProperty("err_no")
+    @JSONField(name = "err_no")
     private Integer errNo;
-    @JsonProperty("err_msg")
+     @JSONField(name = "err_msg")
     private String errMsg;
-    @JsonProperty("data")
+     @JSONField(name = "data")
     private DataDTO data;
 
     @NoArgsConstructor
     @Data
     public static class DataDTO {
-        @JsonProperty("dip_action")
+         @JSONField(name = "dip_action")
         private Integer dipAction;
-        @JsonProperty("has_dip")
+         @JSONField(name = "has_dip")
         private Boolean hasDip;
-        @JsonProperty("total_value")
+         @JSONField(name = "total_value")
         private Integer totalValue;
-        @JsonProperty("dip_value")
+         @JSONField(name = "dip_value")
         private Integer dipValue;
     }
 }

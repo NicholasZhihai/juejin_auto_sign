@@ -36,7 +36,10 @@ public class DrawSchedule {
                 continue;
             }
             //第一次免费抽奖
-            draw(item);
+            try {
+                draw(item);
+            } catch (Exception e) {
+            }
             int curPoint = getCurPoint(item);
             dingding.send(item.getUserName() + "剩余矿石" + curPoint);
             if (item.isDrawAll()) {

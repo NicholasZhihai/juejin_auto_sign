@@ -1,5 +1,6 @@
 package com.lizhihai.juejin.domain.response;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,19 +12,19 @@ import java.util.Date;
 @Data
 public class CalendarResponse {
 
-    @JsonProperty("err_no")
+     @JSONField(name = "err_no")
     private Integer errNo;
-    @JsonProperty("err_msg")
+     @JSONField(name = "err_msg")
     private String errMsg;
-    @JsonProperty("data")
+     @JSONField(name = "data")
     private DataDTO data;
 
     @NoArgsConstructor
     @Data
     public static class DataDTO {
-        @JsonProperty("aphorism")
+         @JSONField(name = "aphorism")
         private String aphorism;
-        @JsonProperty("should_or_not")
+         @JSONField(name = "should_or_not")
         private String shouldOrNot;
         @Override
         public String toString(){
