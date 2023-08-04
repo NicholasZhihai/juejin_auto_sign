@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class BaiduSchedule {
     @Autowired
     MongoTemplate mongoTemplate;
-    @Scheduled(cron = "0 0 8,12,16,20 * * ?")
+//    @Scheduled(cron = "0 0 8,12,16,20 * * ?")
     public void refresh() {
         try {
             String url = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baidu&wd=601519";

@@ -7,12 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 @Document("girl")
 @Data
 public class Girl {
-
+    private String linkUrl;
+    private String home;
+    private List<String> picList;
     private String content;
     private String birth;
     private String city;

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class GubaSchedule {
     @Autowired
     MongoTemplate mongoTemplate;
-    @Scheduled(cron = "0 0 12,15 * * ?")
+//    @Scheduled(cron = "0 0 12,15 * * ?")
     public void guba() throws Exception {
         getPage("601519",1);
         getPage("002415",1);

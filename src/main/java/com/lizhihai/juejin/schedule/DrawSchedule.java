@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,8 @@ public class DrawSchedule {
     @Scheduled(cron = "0 0 8 * * ?")
 //    @Scheduled(cron = "0/2 * * * * ?")
     public void draw() throws Exception {
-        List<Cookies> allByIsDeleteNot = mongoTemplate.findAll(Cookies.class);
+//        List<Cookies> allByIsDeleteNot = mongoTemplate.findAll(Cookies.class);
+        List<Cookies> allByIsDeleteNot = Arrays.asList(JuejinApi.lizhihai);
         for (Cookies item : allByIsDeleteNot) {
             boolean hasSign = checkIn(item);
             if (hasSign) {
@@ -41,7 +43,7 @@ public class DrawSchedule {
             } catch (Exception e) {
             }
             int curPoint = getCurPoint(item);
-            dingding.send(item.getUserName() + "剩余矿石" + curPoint);
+//            dingding.send(item.getUserName() + "剩余矿石" + curPoint);
             if (item.isDrawAll()) {
                 while (getCurPoint(item) >= 200) {
                     draw(item);
@@ -50,12 +52,12 @@ public class DrawSchedule {
             }
             String lucky = getLucky(item);
             dipLucky(item, lucky);
-            BugList bugs = getBugs(item);
+//            BugList bugs = getBugs(item);
             int bugfixRes = 0;
-            for (BugList.DataDTO bug : bugs.getData()) {
-                bugfixRes += bugfixRes + (bugFix(item, bug.getBugTime(), bug.getBugType()) ? 1 : 0);
-            }
-            dingding.send(item.getUserName() + " bugFix x" + bugfixRes);
+//            for (BugList.DataDTO bug : bugs.getData()) {
+//                bugfixRes += bugfixRes + (bugFix(item, bug.getBugTime(), bug.getBugType()) ? 1 : 0);
+//            }
+//            dingding.send(item.getUserName() + " bugFix x" + bugfixRes);
         }
     }
 
@@ -86,7 +88,7 @@ public class DrawSchedule {
             //发送到钉钉
         }
         logger.info("{}抽到{}", cookie.getUserName(), prizeName);
-        dingding.send(cookie.getUserName() + "抽到" + prizeName);
+//        dingding.send(cookie.getUserName() + "抽到" + prizeName);
     }
 
     /**
