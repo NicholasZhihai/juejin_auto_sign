@@ -100,9 +100,11 @@ public class ReptileSchedule {
                     }
                     String linkUrl = "https://juejin.cn/pin/" + e.getMsgId() + "#comment";
                     girl.setLinkUrl(linkUrl);
-                    qywxUtil.sendMarkDown(sb.toString() + " 可以无脑 冲冲冲", Arrays.asList("18390921146"), linkUrl);
+
                     if (!CollectionUtils.isEmpty(e.getMsgInfo().getPicList())) {
                         qywxUtil.sendPicture(content, linkUrl, e.getMsgInfo().getPicList());
+                    } else {
+                        qywxUtil.sendMarkDown(sb.toString() + " 可以无脑 冲冲冲", Arrays.asList("18390921146"), linkUrl);
                     }
                     //dingding.send("快马来报！", content, "https://juejin.cn/user/" + e.getMsgInfo().getUserId() + "/pins", e.getMsgId(), "18390921146");
                 }
