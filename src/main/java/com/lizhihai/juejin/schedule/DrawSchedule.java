@@ -6,7 +6,7 @@ import com.lizhihai.juejin.constans.JuejinApi;
 import com.lizhihai.juejin.domain.Cookies;
 import com.lizhihai.juejin.domain.response.*;
 import com.lizhihai.juejin.util.Dingding;
-import com.lizhihai.juejin.util.HttpUtil;
+import com.lizhihai.juejin.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -66,7 +66,7 @@ public class DrawSchedule {
      * 签到
      */
     public boolean checkIn(Cookies cookie) throws Exception {
-        String response = HttpUtil.commonRequest(JuejinApi.CHECK_IN, JuejinApi.POST, cookie.getCookie());
+        String response = HttpClientUtil.commonRequest(JuejinApi.CHECK_IN, JuejinApi.POST, cookie.getCookie());
         logger.info("{}{}", cookie.getUserName(), response);
         boolean hasSign = !response.contains("err_no\":0");
         if (hasSign) {
@@ -79,7 +79,7 @@ public class DrawSchedule {
      * 抽奖
      */
     public void draw(Cookies cookie) throws Exception {
-        String response = HttpUtil.commonRequest(JuejinApi.DRAW, JuejinApi.POST, cookie.getCookie());
+        String response = HttpClientUtil.commonRequest(JuejinApi.DRAW, JuejinApi.POST, cookie.getCookie());
         DrawResponse data = JSON.parseObject(response, new TypeReference<DrawResponse>() {
         });
         String prizeName = data.getData().getLotteryName();
@@ -98,7 +98,7 @@ public class DrawSchedule {
         Map<String, Object> map = new HashMap<>();
         map.put("page_no", 1);
         map.put("page_size", 5);
-        String response = HttpUtil.commonRequest(JuejinApi.GET_LUCKY, JuejinApi.POST, cookies.getCookie(), map);
+        String response = HttpClientUtil.commonRequest(JuejinApi.GET_LUCKY, JuejinApi.POST, cookies.getCookie(), map);
         LuckyResponse data = JSON.parseObject(response, new TypeReference<LuckyResponse>() {
         });
         return data.getData().getLotteries().get(0).getHistoryId();
@@ -110,7 +110,7 @@ public class DrawSchedule {
     public void dipLucky(Cookies cookie, String id) throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("lottery_history_id", id);
-        String response = HttpUtil.commonRequest(JuejinApi.DIP_LUCKY, JuejinApi.POST, cookie.getCookie(), param);
+        String response = HttpClientUtil.commonRequest(JuejinApi.DIP_LUCKY, JuejinApi.POST, cookie.getCookie(), param);
         DipLucky data = JSON.parseObject(response, new TypeReference<DipLucky>() {
         });
         if (data.getErrNo() != 0) {
@@ -128,7 +128,7 @@ public class DrawSchedule {
         Map<String, Object> map = new HashMap<>();
         map.put("page_no", 1);
         map.put("page_size", 20);
-        String response = HttpUtil.commonRequest(JuejinApi.BUGS, JuejinApi.POST, cookies.getCookie(), map);
+        String response = HttpClientUtil.commonRequest(JuejinApi.BUGS, JuejinApi.POST, cookies.getCookie(), map);
         return JSON.parseObject(response, new TypeReference<BugList>() {
         });
     }
@@ -140,7 +140,7 @@ public class DrawSchedule {
         Map<String, Object> param = new HashMap<>();
         param.put("bug_time", bugTime);
         param.put("bug_type", bugType);
-        String response = HttpUtil.commonRequest(JuejinApi.COLLECT_BUG, JuejinApi.POST, cookie.getCookie(), param);
+        String response = HttpClientUtil.commonRequest(JuejinApi.COLLECT_BUG, JuejinApi.POST, cookie.getCookie(), param);
         if (!response.contains("err_no\":0")) {
             logger.error("bugFix失败{}{}", cookie.getUserName(), response);
             return false;
@@ -156,7 +156,7 @@ public class DrawSchedule {
      * 查询剩余矿石
      */
     public int getCurPoint(Cookies cookie) throws Exception {
-        String response = HttpUtil.commonRequest(JuejinApi.GET_CUR_POINT, JuejinApi.GET, cookie.getCookie());
+        String response = HttpClientUtil.commonRequest(JuejinApi.GET_CUR_POINT, JuejinApi.GET, cookie.getCookie());
         logger.info(response);
         Map<String, Object> res = JSON.parseObject(response);
         int curPoint = (int) res.get("data");
@@ -168,7 +168,7 @@ public class DrawSchedule {
      * 查询每日程序员日历文案
      */
     public CalendarResponse getCalendarText(Cookies cookie) throws Exception {
-        String response = HttpUtil.commonRequest(JuejinApi.GET_CODER_CLENDAR, JuejinApi.GET, cookie.getCookie());
+        String response = HttpClientUtil.commonRequest(JuejinApi.GET_CODER_CLENDAR, JuejinApi.GET, cookie.getCookie());
         CalendarResponse data = JSON.parseObject(response, new TypeReference<CalendarResponse>() {
         });
         logger.info(data.toString());
